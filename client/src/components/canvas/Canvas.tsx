@@ -1,7 +1,4 @@
 import Konva from "konva";
-import { Layer as KonvaLayer } from "konva/lib/Layer";
-import * as shapes from "konva/lib/shapes/Rect";
-import { Stage as KonvaStage } from "konva/lib/Stage";
 import React, { Component } from "react";
 import { Stage, Layer, Rect, Group } from "react-konva";
 import { CanvasController } from "../../logic/canvas";
@@ -19,9 +16,9 @@ export class OneCanvas extends Component<ICanvasProps, IState> {
   controller!: CanvasController;
   ctx!: CanvasRenderingContext2D;
   scaleBy = 1.1;
-  stageRef = React.createRef<KonvaStage>();
-  canvasRef = React.createRef<shapes.Rect>();
-  layerRef = React.createRef<KonvaLayer>();
+  stageRef = React.createRef<Konva.Stage>();
+  canvasRef = React.createRef<Konva.Group>();
+  layerRef = React.createRef<Konva.Layer>();
   state: IState = {
     num: 0,
     blah: "hat",
@@ -63,31 +60,38 @@ export class OneCanvas extends Component<ICanvasProps, IState> {
           }}
         >
           <Layer ref={this.layerRef}>
-           
-            <Rect
+            <Group
               width={800}
               height={800}
               x={window.innerWidth / 2 - 400}
               y={window.innerHeight / 2 - 400}
-              fill="white"
               ref={this.canvasRef}
-              onClick={(e) => {
-                var rect = this.canvasRef.current;
-                var pos = rect?.getRelativePointerPosition()!;
-                var shape = new Konva.Circle({
-                  x: pos.x,
-                  y: pos.y,
-                  fill: "red",
-                  radius: 20,
-                });
-                this.layerRef.current?.add(shape);
-              }}
-              shadowColor="gray"
-              shadowOffsetX={5}
-              shadowOffsetY={5}
-              shadowBlur={10}
-              shadowEnabled={true}
-            />
+            >
+              <Rect
+                width={800}
+                height={800}
+                fill="white"
+                onClick={(e) => {
+                  var rect = this.canvasRef.current;
+                  var pos = rect?.getRelativePointerPosition()!;
+                  console.log(Math.floor(pos.x), Math.floor(pos.y));
+                  var shape = new Konva.Rect({
+                    x: Math.floor(pos.x),
+                    y: Math.floor(pos.y),
+                    fill: "red",
+                    width: 1,
+                    height: 1,
+                  });
+                  this.canvasRef.current?.add(shape);
+                }}
+                shadowColor="gray"
+                shadowOffsetX={5}
+                shadowOffsetY={5}
+                shadowBlur={10}
+                shadowEnabled={true}
+              />
+            </Group>
+
             {/* <Circle
               x={window.innerWidth / 2}
               y={window.innerHeight / 2}

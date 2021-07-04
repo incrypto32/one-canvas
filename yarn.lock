@@ -4591,6 +4591,11 @@ klaw@^1.0.0:
   optionalDependencies:
     graceful-fs "^4.1.9"
 
+konva@^8.1.1:
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/konva/-/konva-8.1.1.tgz#c92c3f81b371947eade7a8f76ee2df34c71b333c"
+  integrity sha512-2jLijU0N2DNJwBoWzwyxHwqx4GLPjTppSD9TU/G49B2MJ8Sf10E7Y0EmuULjYcNDIFsY+3zMt0VFonKNfyz7WA==
+
 lcid@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/lcid/-/lcid-1.0.0.tgz#308accafa0bc483a3867b4b6f2b9506251d1b835"
