@@ -16,7 +16,7 @@ export class OneCanvas extends Component<ICanvasProps, IState> {
   controller!: CanvasController;
   ctx!: CanvasRenderingContext2D;
   scaleFactor = 1.1;
-  scale = 0.9;
+  scale = 0.8;
   innerCanvasSize = 1000;
   stageRef = React.createRef<Konva.Stage>();
   canvasRef = React.createRef<Konva.Group>();
@@ -67,8 +67,12 @@ export class OneCanvas extends Component<ICanvasProps, IState> {
             <Group
               width={this.innerCanvasSize}
               height={this.innerCanvasSize}
-              x={window.innerWidth / 2 - this.innerCanvasSize / 2}
-              y={window.innerHeight / 2 - this.innerCanvasSize / 2}
+              x={
+                (window.innerWidth / this.scale - this.innerCanvasSize ) / 2
+              }
+              y={
+                (window.innerHeight / this.scale - this.innerCanvasSize ) / 2
+              }
               ref={this.canvasRef}
             >
               <Rect
