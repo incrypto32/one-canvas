@@ -6,7 +6,7 @@ import OneCanvas from "./components/canvas/Canvas";
 export class App extends Component {
   render() {
     return (
-      <div className="box-border h-screen mx-auto bg-black flex justify-center items-center">
+      <div className="box-border h-screen mx-auto flex justify-center items-center">
         <OneCanvas name="One Canvas" />
       </div>
     );
