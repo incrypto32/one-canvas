@@ -15,7 +15,9 @@ interface IState {
 export class OneCanvas extends Component<ICanvasProps, IState> {
   controller!: CanvasController;
   ctx!: CanvasRenderingContext2D;
-  scaleBy = 1.1;
+  scaleFactor = 1.1;
+  scale = 0.9;
+  innerCanvasSize = 1000;
   stageRef = React.createRef<Konva.Stage>();
   canvasRef = React.createRef<Konva.Group>();
   layerRef = React.createRef<Konva.Layer>();
@@ -32,6 +34,8 @@ export class OneCanvas extends Component<ICanvasProps, IState> {
           height={window.innerHeight}
           className="bg-gray-300"
           draggable={true}
+          scaleX={this.scale}
+          scaleY={this.scale}
           ref={this.stageRef}
           onWheel={(e) => {
             var stage = this.stageRef.current!;
@@ -45,31 +49,31 @@ export class OneCanvas extends Component<ICanvasProps, IState> {
               y: (pointer.y - stage.y()) / oldScale,
             };
 
-            var newScale =
+            this.scale =
               e.evt.deltaY > 0
-                ? oldScale / this.scaleBy
-                : oldScale * this.scaleBy;
+                ? this.scale / this.scaleFactor
+                : this.scale * this.scaleFactor;
 
-            stage.scale({ x: newScale, y: newScale });
+            stage.scale({ x: this.scale, y: this.scale });
 
             var newPos = {
-              x: pointer.x - mousePointTo.x * newScale,
-              y: pointer.y - mousePointTo.y * newScale,
+              x: pointer.x - mousePointTo.x * this.scale,
+              y: pointer.y - mousePointTo.y * this.scale,
             };
             stage.position(newPos);
           }}
         >
           <Layer ref={this.layerRef}>
             <Group
-              width={800}
-              height={800}
-              x={window.innerWidth / 2 - 400}
-              y={window.innerHeight / 2 - 400}
+              width={this.innerCanvasSize}
+              height={this.innerCanvasSize}
+              x={window.innerWidth / 2 - this.innerCanvasSize / 2}
+              y={window.innerHeight / 2 - this.innerCanvasSize / 2}
               ref={this.canvasRef}
             >
               <Rect
-                width={800}
-                height={800}
+                width={this.innerCanvasSize}
+                height={this.innerCanvasSize}
                 fill="white"
                 onClick={(e) => {
                   var rect = this.canvasRef.current;
