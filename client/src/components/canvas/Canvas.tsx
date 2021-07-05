@@ -2,14 +2,14 @@ import Konva from "konva";
 import { KonvaEventObject } from "konva/lib/Node";
 import React, { Component } from "react";
 import { Stage, Layer, Rect, Group, Image } from "react-konva";
+import _ from "lodash";
 
 export interface ICanvasProps {
   name: string;
 }
 
 interface IState {
-  num?: number;
-  blah?: string;
+  imgData: Uint8ClampedArray;
 }
 
 export class OneCanvas extends Component<ICanvasProps, IState> {
@@ -19,9 +19,11 @@ export class OneCanvas extends Component<ICanvasProps, IState> {
   stageRef = React.createRef<Konva.Stage>();
   canvasRef = React.createRef<Konva.Group>();
   layerRef = React.createRef<Konva.Layer>();
+
   state: IState = {
-    num: 0,
-    blah: "hat",
+    imgData: new Uint8ClampedArray(
+      4 * this.innerCanvasSize * this.innerCanvasSize
+    ),
   };
 
   onWheel = (e: KonvaEventObject<WheelEvent>) => {
@@ -54,9 +56,19 @@ export class OneCanvas extends Component<ICanvasProps, IState> {
   a = () => {
     var canvas = new HTMLCanvasElement();
     var context = canvas.getContext("2d");
-    const arr = new Uint8ClampedArray(4 * 1000 * 1000);
-    let imageData = new ImageData(arr, 1000);
+
+    let imageData = new ImageData(this.state.imgData, 1000);
   };
+
+  modifyPixel(x: number, y: number) {
+    var i = 4 * (x + this.innerCanvasSize * y); // 4x+ly
+    let data = _.cloneDeep(this.state.imgData);
+    data[i] = 255;
+    data[i + 1] = 0;
+    data[i + 2] = 0;
+    data[i + 3] = 1;
+    this.setState({ imgData: data });
+  }
 
   public render(): JSX.Element {
     return (
