@@ -1,7 +1,7 @@
 import Konva from "konva";
+import { KonvaEventObject } from "konva/lib/Node";
 import React, { Component } from "react";
-import { Stage, Layer, Rect, Group } from "react-konva";
-import { CanvasController } from "../../logic/canvas";
+import { Stage, Layer, Rect, Group, Image } from "react-konva";
 
 export interface ICanvasProps {
   name: string;
@@ -13,8 +13,6 @@ interface IState {
 }
 
 export class OneCanvas extends Component<ICanvasProps, IState> {
-  controller!: CanvasController;
-  ctx!: CanvasRenderingContext2D;
   scaleFactor = 1.1;
   scale = 0.8;
   innerCanvasSize = 1000;
@@ -24,6 +22,40 @@ export class OneCanvas extends Component<ICanvasProps, IState> {
   state: IState = {
     num: 0,
     blah: "hat",
+  };
+
+  onWheel = (e: KonvaEventObject<WheelEvent>) => {
+    var stage = this.stageRef.current!;
+
+    e.evt.preventDefault();
+    var oldScale = stage.scaleX();
+
+    var pointer = stage.getPointerPosition()!;
+
+    var mousePointTo = {
+      x: (pointer.x - stage.x()) / oldScale,
+      y: (pointer.y - stage.y()) / oldScale,
+    };
+
+    this.scale =
+      e.evt.deltaY > 0
+        ? this.scale / this.scaleFactor
+        : this.scale * this.scaleFactor;
+
+    stage.scale({ x: this.scale, y: this.scale });
+
+    var newPos = {
+      x: pointer.x - mousePointTo.x * this.scale,
+      y: pointer.y - mousePointTo.y * this.scale,
+    };
+    stage.position(newPos);
+  };
+
+  a = () => {
+    var canvas = new HTMLCanvasElement();
+    var context = canvas.getContext("2d");
+    const arr = new Uint8ClampedArray(4 * 1000 * 1000);
+    let imageData = new ImageData(arr, 1000);
   };
 
   public render(): JSX.Element {
@@ -37,42 +69,14 @@ export class OneCanvas extends Component<ICanvasProps, IState> {
           scaleX={this.scale}
           scaleY={this.scale}
           ref={this.stageRef}
-          onWheel={(e) => {
-            var stage = this.stageRef.current!;
-            e.evt.preventDefault();
-            var oldScale = stage.scaleX();
-
-            var pointer = stage.getPointerPosition()!;
-
-            var mousePointTo = {
-              x: (pointer.x - stage.x()) / oldScale,
-              y: (pointer.y - stage.y()) / oldScale,
-            };
-
-            this.scale =
-              e.evt.deltaY > 0
-                ? this.scale / this.scaleFactor
-                : this.scale * this.scaleFactor;
-
-            stage.scale({ x: this.scale, y: this.scale });
-
-            var newPos = {
-              x: pointer.x - mousePointTo.x * this.scale,
-              y: pointer.y - mousePointTo.y * this.scale,
-            };
-            stage.position(newPos);
-          }}
+          onWheel={this.onWheel}
         >
           <Layer ref={this.layerRef}>
             <Group
               width={this.innerCanvasSize}
               height={this.innerCanvasSize}
-              x={
-                (window.innerWidth / this.scale - this.innerCanvasSize ) / 2
-              }
-              y={
-                (window.innerHeight / this.scale - this.innerCanvasSize ) / 2
-              }
+              x={(window.innerWidth / this.scale - this.innerCanvasSize) / 2}
+              y={(window.innerHeight / this.scale - this.innerCanvasSize) / 2}
               ref={this.canvasRef}
             >
               <Rect
@@ -91,6 +95,7 @@ export class OneCanvas extends Component<ICanvasProps, IState> {
                     height: 1,
                   });
                   this.canvasRef.current?.add(shape);
+                  console.log(this.canvasRef.current?.toObject());
                 }}
                 shadowColor="gray"
                 shadowOffsetX={5}
@@ -98,23 +103,9 @@ export class OneCanvas extends Component<ICanvasProps, IState> {
                 shadowBlur={10}
                 shadowEnabled={true}
               />
+              {/* <Image image={}/> */}
             </Group>
 
-            {/* <Circle
-              x={window.innerWidth / 2}
-              y={window.innerHeight / 2}
-              stroke="red"
-              fill="green"
-              radius={50}
-            />
-            <Rect
-              width={10}
-              height={10}
-              x={window.innerWidth / 2 - 5}
-              y={window.innerHeight / 2 - 5}
-              fill="blue"
-              onClick={(e) => {}}
-            /> */}
             {}
           </Layer>
         </Stage>
