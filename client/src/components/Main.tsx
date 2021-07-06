@@ -27,7 +27,6 @@ export const Main: React.FC = (props) => {
     <div className="box-border h-screen mx-auto flex flex-col justify-center items-center">
       <div className="flex-grow"></div>
       <OneCanvas name="One Canvas" />
-
       <ColorPallete rgba={colorList} />
     </div>
   );

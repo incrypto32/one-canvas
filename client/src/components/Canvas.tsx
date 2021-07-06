@@ -2,15 +2,16 @@ import Konva from "konva";
 import { KonvaEventObject } from "konva/lib/Node";
 import React, { Component } from "react";
 import { Stage, Layer, Rect, Group, Image } from "react-konva";
+import useImage from "use-image";
 import { Color, ColorContext } from "../context/ColorContext";
-// import _ from "lodash";
+import { SmartMock } from "../logic/SmartMock";
 
 export interface ICanvasProps {
   name: string;
 }
 
 interface IState {
-  canvas: HTMLCanvasElement;
+  canvas: CanvasImageSource | undefined;
 }
 
 export class OneCanvas extends Component<ICanvasProps, IState> {
@@ -22,6 +23,7 @@ export class OneCanvas extends Component<ICanvasProps, IState> {
   canvasRef = React.createRef<Konva.Group>();
   layerRef = React.createRef<Konva.Layer>();
   imageRef = React.createRef<Konva.Image>();
+  smartMock = new SmartMock();
   imgData = new Uint8ClampedArray(
     4 * this.innerCanvasSize * this.innerCanvasSize
   );
@@ -39,9 +41,11 @@ export class OneCanvas extends Component<ICanvasProps, IState> {
       y: (window.innerHeight / this.scale - this.innerCanvasSize) / 2,
     };
   }
+
   componentDidMount() {
     let ctx = this.layerRef.current?.getContext()._context!;
     ctx.imageSmoothingEnabled = false;
+    this.setState({ canvas: this.smartMock.getPixels() as any });
   }
 
   onWheel = (e: KonvaEventObject<WheelEvent>) => {
@@ -79,6 +83,16 @@ export class OneCanvas extends Component<ICanvasProps, IState> {
     canvas.height = imageData.height;
     context?.putImageData(imageData, 0, 0);
     this.setState({ canvas });
+  };
+  
+  b = (imgData: Uint8ClampedArray) => {
+    var canvas = document.createElement("canvas");
+    var context = canvas.getContext("2d");
+    let imageData = new ImageData(imgData, 1000);
+    canvas.width = imageData.width;
+    canvas.height = imageData.height;
+    context?.putImageData(imageData, 0, 0);
+    return canvas;
   };
 
   modifyPixel(x: number, y: number, context: Color) {
