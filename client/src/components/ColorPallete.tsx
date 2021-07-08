@@ -11,7 +11,7 @@ export const ColorPallete: React.FC<{ rgba: RGBA[] }> = (props) => {
           <div
             className={
               `p-5 rounded-full m-0.5 shadow-md ` +
-              (selectedColor === i
+              (selectedColor === i 
                 ? "border-2 border-black"
                 : "border border-black")
             }
