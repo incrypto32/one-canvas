@@ -86,7 +86,8 @@ export class OneCanvas extends Component<ICanvasProps, IState> {
     var pos = rect?.getRelativePointerPosition()!;
     pos.x = Math.floor(pos.x);
     pos.y = Math.floor(pos.y);
-    this.modifyPixel(pos.x, pos.y, this.context.rgba);
+    this.selectedPixel = { pos: pos, price: "0" };
+    this.setState({ showModal: true });
   };
 
   setCanvasState = (imgData: Uint8ClampedArray) => {
@@ -118,6 +119,8 @@ export class OneCanvas extends Component<ICanvasProps, IState> {
             this.setState({ showModal: showModal });
           }}
           onConfirmed={() => {
+            let pos = this.selectedPixel.pos;
+            this.modifyPixel(pos.x, pos.y, this.context.rgba);
             console.log("Confirmed");
           }}
         />

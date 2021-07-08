@@ -2,6 +2,7 @@ import React from "react";
 import { RGBA } from "../context/ColorContext";
 import OneCanvas from "./Canvas";
 import { ColorPallete } from "./ColorPallete";
+import "animate.css"
 
 export const Main: React.FC = (props) => {
   // const value = useContext(ColorContext)!;

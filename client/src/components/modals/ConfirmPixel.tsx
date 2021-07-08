@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React from "react";
 
 interface IConfirmPixelProps {
   showModal: boolean;
@@ -9,8 +9,10 @@ interface IConfirmPixelProps {
 export const ConfirmPixelDialogue: React.FC<IConfirmPixelProps> = (props) => {
   return props.showModal ? (
     <>
-      <div className="absolute bg-black bg-opacity-30 w-full h-full flex justify-center items-center">
-        <div className="max-w-lg p-5 relative mx-auto my-2 rounded-xl shadow-lg  bg-white ">
+      <div
+        className="absolute  w-full h-full flex justify-center items-center"
+        onClick={() => props.setShowModal(false)}>
+        <div className="animate__animated animate__zoomIn animate__faster max-w-lg p-5 relative mx-auto my-2 rounded-xl shadow-2xl  bg-white ">
           <div className="">
             <div className="text-center p-5 flex-auto justify-center">
               <h2 className="text-xl font-bold py-4 ">
@@ -26,7 +28,7 @@ export const ConfirmPixelDialogue: React.FC<IConfirmPixelProps> = (props) => {
               <button className="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100">
                 Cancel
               </button>
-              <button className="mb-2 md:mb-0 bg-green-400 border border-green-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-green-600">
+              <button className="mb-2 md:mb-0 bg-green-400 border border-green-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-green-600" onClick={props.onConfirmed}>
                 Confirm
               </button>
             </div>
