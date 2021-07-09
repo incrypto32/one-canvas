@@ -2,10 +2,10 @@ import React from "react";
 import { RGBA } from "../context/ColorContext";
 import OneCanvas from "./Canvas";
 import { ColorPallete } from "./ColorPallete";
-import "animate.css"
+import "animate.css";
+import PixelCanvas from "./PixelCanvas";
 
 export const Main: React.FC = (props) => {
-  // const value = useContext(ColorContext)!;
   const colorList: RGBA[] = [
     { r: 255, g: 255, b: 255 },
     { r: 228, g: 228, b: 228 },
@@ -27,7 +27,8 @@ export const Main: React.FC = (props) => {
   return (
     <div className="box-border h-screen mx-auto flex flex-col justify-center items-center">
       <div className="flex-grow"></div>
-      <OneCanvas name="One Canvas" />
+      {/* <OneCanvas name="One Canvas" /> */}
+      <PixelCanvas />
       <ColorPallete rgba={colorList} />
     </div>
   );
